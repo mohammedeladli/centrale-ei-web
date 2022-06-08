@@ -3,11 +3,13 @@
     <thead>
       <th>Film</th>
       <th>Date</th>
+      <th>Overview</th>
     </thead>
     <tbody>
       <tr v-for="movie in movies" :key="movie.id">
         <td>{{ movie.title }}</td>
         <td>{{ movie.release_date }}</td>
+        <td>{{ movie.overview }}</td>
       </tr>
     </tbody>
   </table>

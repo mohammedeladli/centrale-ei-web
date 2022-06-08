@@ -11,25 +11,23 @@
 
     <div class="movies-list">
       <div class="movie" v-for="movie in movies" :key="movie.id">
-        <router-link
-          :to="'/movie/' + movie.id"
-          class="movie-link"
-          @click="update(movie)"
-        >
+        <router-link :to="'/movie/' + movie.id" class="movie-link">
           <div class="product-image">
-            <img
-              :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path"
-              height="500"
-              weight="400"
-              alt="Movie Poster"
-            />
-          </div>
-          <div class="detail">
-            <h4>
-              <p class="title">{{ movie.title }}</p>
-            </h4>
-            <p class="year">{{ movie.release_date }}</p>
-            <p class="description">{{ movie.overview }}</p>
+            <div class="images">
+              <img
+                :src="
+                  'https://image.tmdb.org/t/p/original/' + movie.poster_path
+                "
+                height="400"
+                weight="320"
+                alt="Movie Poster"
+              />
+            </div>
+            <div class="detail">
+              <h3>{{ movie.title }}</h3>
+              <p class="year">{{ movie.release_date }}</p>
+              <p class="description">{{ movie.overview }}</p>
+            </div>
           </div>
         </router-link>
       </div>
@@ -91,7 +89,7 @@ li {
 }
 
 a {
-  color: #42b983;
+  color: rgb(134, 173, 49);
 }
 
 .product-image:hover.product-image {
@@ -117,6 +115,44 @@ a {
   width: 320px;
   align-content: center;
   justify-content: center;
+}
+
+.product-image {
+  width: 320px;
+  margin: auto;
+  height: 400px;
+  transition: all 0.5s ease-in-out;
+}
+
+.product-image:hover {
+  transform: scale(1.2);
+}
+
+.product-image:hover .images {
+  transition: 0.5s;
+  opacity: 0.4;
+}
+
+.detail {
+  width: 250px;
+
+  position: relative;
+  right: 0%;
+  opacity: 0;
+}
+
+.product-image:hover .detail {
+  opacity: 1;
+  color: rgb(0, 0, 0);
+  transition: 0.5s;
+}
+
+.detail {
+  position: absolute;
+  bottom: 20px;
+  left: 30px;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
 }
 
 h4 {

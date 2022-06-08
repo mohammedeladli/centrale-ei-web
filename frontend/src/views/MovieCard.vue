@@ -1,9 +1,9 @@
 <template>
   <div class="product-image">
     <img
-      :src="'https://image.tmdb.org/t/p/original/' + $root.movi.poster_path"
-      height="500"
-      weight="400"
+      :src="'https://image.tmdb.org/t/p/original/' + $root.movi.backdrop_path"
+      height="720"
+      weight="auto"
       alt="Movie Poster"
     />
   </div>
@@ -22,18 +22,16 @@
 
 <style>
 .product-image {
-  height: 500px;
-  width: 400px;
   margin: auto;
   align-items: center;
   justify-content: center;
 }
 
 h4 {
-  margin: 0px 0 0;
+  margin: auto;
 }
 h3 {
-  margin: 0px 0 0;
+  margin: auto;
 }
 h2 {
   margin: 0px 0 0;

@@ -1,10 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
-import Counter from "../views/Counter.vue";
 import Users from "../views/Users.vue";
-import About from "../views/About.vue";
 import Movie from "../views/Movie.vue";
 import MovieCard from "../views/MovieCard.vue";
+import AddMovie from "../components/AddMovie.vue";
 const routes = [
   {
     path: "/",
@@ -16,25 +15,21 @@ const routes = [
     name: "Movie",
     component: Movie,
   },
-  {
-    path: "/counter",
-    name: "Counter",
-    component: Counter,
-  },
+
   {
     path: "/users",
     name: "Users",
     component: Users,
   },
   {
-    path: "/about",
-    name: "About",
-    component: About,
-  },
-  {
     path: "/movie/:id",
     name: "Movie Detail",
     component: MovieCard,
+  },
+  {
+    path: "/add_movie",
+    name: "Add Movie",
+    component: AddMovie,
   },
 ];
 
