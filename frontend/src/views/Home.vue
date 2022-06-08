@@ -1,84 +1,72 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <h1>Welcome to Your Vue.js App</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br />
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel"
-          target="_blank"
-          >babel</a
+    <form @submit.prevent="SearchMovies()" class="search-box">
+      <input
+        type="text"
+        placeholder="What are you looking for?"
+        v-model="search"
+      />
+      <input type="submit" value="Search" />
+    </form>
+
+    <div class="movies-list">
+      <div class="movie" v-for="movie in movies" :key="movie.id">
+        <router-link
+          :to="'/movie/' + movie.id"
+          class="movie-link"
+          @click="update(movie)"
         >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router"
-          target="_blank"
-          >router</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint"
-          target="_blank"
-          >eslint</a
-        >
-      </li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li>
-        <a href="https://vuejs.org" target="_blank">Core Docs</a>
-      </li>
-      <li>
-        <a href="https://forum.vuejs.org" target="_blank">Forum</a>
-      </li>
-      <li>
-        <a href="https://chat.vuejs.org" target="_blank">Community Chat</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/vuejs" target="_blank">Twitter</a>
-      </li>
-      <li>
-        <a href="https://news.vuejs.org" target="_blank">News</a>
-      </li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li>
-        <a href="https://router.vuejs.org" target="_blank">vue-router</a>
-      </li>
-      <li>
-        <a href="https://vuex.vuejs.org" target="_blank">vuex</a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-devtools#vue-devtools"
-          target="_blank"
-          >vue-devtools</a
-        >
-      </li>
-      <li>
-        <a href="https://vue-loader.vuejs.org" target="_blank">vue-loader</a>
-      </li>
-      <li>
-        <a href="https://github.com/vuejs/awesome-vue" target="_blank"
-          >awesome-vue</a
-        >
-      </li>
-    </ul>
+          <div class="product-image">
+            <img
+              :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path"
+              height="500"
+              weight="400"
+              alt="Movie Poster"
+            />
+          </div>
+          <div class="detail">
+            <h4>
+              <p class="title">{{ movie.title }}</p>
+            </h4>
+            <p class="year">{{ movie.release_date }}</p>
+            <p class="description">{{ movie.overview }}</p>
+          </div>
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Home",
+  data: function () {
+    return {
+      movieName: "",
+      movies: [],
+    };
+  },
+  created() {
+    axios
+      .get(
+        `https://api.themoviedb.org/3/movie/popular?api_key=522d421671cf75c2cba341597d86403a&language=en-US`
+      )
+      .then((response) => {
+        // Do something if call succeeded
+        console.log(response.data.results);
+        this.movies = response.data.results;
+      })
+      .catch((error) => {
+        // Do something if call failed
+        console.log(error);
+      });
+  },
+  methods: {
+    update: function (mov) {
+      this.$root.movi = mov;
+    },
+  },
 };
 </script>
 
@@ -104,5 +92,34 @@ li {
 
 a {
   color: #42b983;
+}
+
+.product-image:hover.product-image {
+  transform: scale(1.2);
+  transition: 300ms;
+}
+
+.movies-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px 0px;
+  align-content: center;
+  justify-content: center;
+}
+
+.product-image {
+  height: 500px;
+  width: 400px;
+  margin: auto;
+}
+
+.detail {
+  width: 320px;
+  align-content: center;
+  justify-content: center;
+}
+
+h4 {
+  margin: 0px 0 0;
 }
 </style>

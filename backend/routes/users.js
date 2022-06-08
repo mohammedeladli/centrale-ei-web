@@ -2,10 +2,16 @@ const express = require("express");
 const UserModel = require("../models/user");
 const router = express.Router();
 
-router.get("/", function (req, res) {
-  UserModel.find({}).then(function (users) {
-    res.json({ users: users });
-  });
+router.get("/", async function (req, res) {
+  const users = await UserModel.find({});
+  res.send(users);
+});
+
+router.get("/:id/movies", async function (req, res) {
+  const user = await UserModel.findOne({
+    _id: req.params.id,
+  }).populate("watchedMovies");
+  res.send(user);
 });
 
 router.post("/new", function (req, res) {
