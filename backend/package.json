@@ -8,8 +8,10 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "cors": "^2.8.5",
     "dotenv-cli": "^5.1.0",
+    "edit-distance": "^1.0.5",
     "express": "^4.18.1",
     "mongoose": "^6.3.5",
     "morgan": "^1.10.0"

@@ -22,7 +22,6 @@
 
 <script>
 import axios from "axios";
-
 export default {
   name: "UsersTable",
   props: {
@@ -49,13 +48,11 @@ export default {
 table {
   border-collapse: collapse;
 }
-
 th,
 td {
   border: 1px solid #000000;
   padding: 10px;
 }
-
 .delete-button {
   cursor: pointer;
 }
