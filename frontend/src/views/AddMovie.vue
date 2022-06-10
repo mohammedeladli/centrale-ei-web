@@ -1,5 +1,5 @@
 <template>
-  <body>
+  <body :style="`background-image: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.7)), url('https://mrserie.fr/wp-content/uploads/2021/11/Netflix-Background-1-1024x576.jpg?ezimgfmt=ng:webp/ngcb1')`">
     <h1> What movie do you want to see on our website?  </h1>
     <h1> Add your suggestion below: </h1>
     <input
@@ -179,6 +179,7 @@
           <span> Western </span>
         </div>
       </article>
+  
 
       <button class="upgrade-btn" @click="envoie">Add</button>
 
@@ -210,6 +211,7 @@ export default {
       vote_average: null,
       date: null,
       adult: null,
+      overview: null,
       added: false,
     };
   },
@@ -224,6 +226,7 @@ export default {
             genre_ids: this.genre_ids,
             date: this.date,
             vote_average: this.vote_average,
+            overview:this.overview,
           })
           .then((response) => {
             this.added = true;
@@ -260,12 +263,12 @@ export default {
   margin-top: 13px;
   margin-bottom: 13px;
   font-family: "Courier New", Courier, monospace;
-  color: rgb(255, 255, 255);
+  color: rgb(255,255,255);
 }
 input[type="text"],
 [type="number"] {
   width: 15%;
-  border: none;
+  border: 2px solid #f25050;
   border-bottom: 2px solid #f25050;
   text-align: center;
   margin-top: 13px;
@@ -273,12 +276,12 @@ input[type="text"],
   padding-top: 7px;
   border-radius: 5px;
   background-color: transparent;
-  color: rgb(255, 255, 255);
+  color: rgb(255,255,255);
   font-size: 20px;
   font-family: "Courier New", Courier, monospace;
 }
 ::placeholder {
-  color: rgb(255, 255, 255);
+  color: rgb(255,255,255);
   font-size: 20px;
   font-family: "Courier New", Courier, monospace;
 }
@@ -287,6 +290,11 @@ body {
   color: #rgb(108, 101, 115);
   background-image: black;
   font-family: "Roboto";
+  background-size: cover;
+  overflow-y:scroll;
+}
+::-webkit-scrollbar {
+display: none;
 }
 .genre {
   max-width: 300px;
@@ -306,7 +314,7 @@ article {
   float: left;
   border: 2px solid #ff3700;
   box-sizing: border-box;
-  color: rgb(255, 255, 255);
+  color: rgb(255,255,255);
 }
 article div {
   width: 100%;
@@ -342,6 +350,7 @@ input[type="checkbox"]:checked ~ div {
   text-decoration: none;
   transition: 0.3s ease;
   background-color: black;
+  color: rgb(255,255,255);
 }
 .upgrade-btn:hover {
   background-color: #eb0b0b;
@@ -376,7 +385,7 @@ input[type="checkbox"]:checked ~ div {
 h1 {
   text-align: center;
   margin-top: 20px;
-  color: rgb(255, 255, 255);
+  color: rgb(255,255,255);
   font-size: 20px;
   font-family: "Courier New", Courier, monospace;
 }

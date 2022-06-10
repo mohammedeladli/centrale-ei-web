@@ -29,7 +29,7 @@
               </div>
               <div>
                 <span>Genres :</span>
-                <span>{{ $root.movi.genre_ids }}</span>
+                <span>{{ changer($root.movi.genre_ids).join(" , ") }}</span>
               </div>
               <div class="star-source">
                 <svg>
@@ -56,62 +56,122 @@
                 </svg>
               </div>
               <div class="star-container">
-                <input type="radio" name="star" id="five" />
-                <label for="five">
-                  <svg class="star">
-                    <use xlink:href="#star" />
-                  </svg>
-                </label>
-                <input type="radio" name="star" id="six" />
-                <label for="six">
-                  <svg class="star">
-                    <use xlink:href="#star" />
-                  </svg>
-                </label>
-                <input type="radio" name="star" id="seven" />
-                <label for="seven">
-                  <svg class="star">
-                    <use xlink:href="#star" />
-                  </svg>
-                </label>
-                <input type="radio" name="star" id="eight" />
-                <label for="eight">
-                  <svg class="star">
-                    <use xlink:href="#star" />
-                  </svg>
-                </label>
-                <input type="radio" name="star" id="nine" />
-                <label for="nine">
-                  <svg class="star">
-                    <use xlink:href="#star" />
-                  </svg>
-                </label>
-                <input type="radio" name="star" id="ten" />
+                <input
+                  type="radio"
+                  name="star"
+                  id="ten"
+                  v-on:click="sendRating(10)"
+                  :checked="$root.movi.score === 10"
+                />
                 <label for="ten">
                   <svg class="star">
                     <use xlink:href="#star" />
                   </svg>
                 </label>
-                <input type="radio" name="star" id="four" />
+                <input
+                  type="radio"
+                  name="star"
+                  id="nine"
+                  v-on:click="sendRating(9)"
+                  :checked="$root.movi.score === 9"
+                />
+                <label for="nine">
+                  <svg class="star">
+                    <use xlink:href="#star" />
+                  </svg>
+                </label>
+                <input
+                  type="radio"
+                  name="star"
+                  id="eight"
+                  v-on:click="sendRating(8)"
+                  :checked="$root.movi.score === 8"
+                />
+                <label for="eight">
+                  <svg class="star">
+                    <use xlink:href="#star" />
+                  </svg>
+                </label>
+                <input
+                  type="radio"
+                  name="star"
+                  id="seven"
+                  v-on:click="sendRating(7)"
+                  :checked="$root.movi.score === 7"
+                />
+                <label for="seven">
+                  <svg class="star">
+                    <use xlink:href="#star" />
+                  </svg>
+                </label>
+                <input
+                  type="radio"
+                  name="star"
+                  id="six"
+                  v-on:click="sendRating(6)"
+                  :checked="$root.movi.score === 6"
+                />
+                <label for="six">
+                  <svg class="star">
+                    <use xlink:href="#star" />
+                  </svg>
+                </label>
+                <input
+                  type="radio"
+                  name="star"
+                  id="five"
+                  v-on:click="sendRating(5)"
+                  :checked="$root.movi.score === 5"
+                />
+                <label for="five">
+                  <svg class="star">
+                    <use xlink:href="#star" />
+                  </svg>
+                </label>
+                <input
+                  type="radio"
+                  name="star"
+                  id="four"
+                  v-on:click="sendRating(4)"
+                  :checked="$root.movi.score === 4"
+                />
                 <label for="four">
                   <svg class="star">
                     <use xlink:href="#star" />
                   </svg>
                 </label>
 
-                <input type="radio" name="star" id="three" />
+                <input
+                  type="radio"
+                  name="star"
+                  id="three"
+                  v-on:click="sendRating(3)"
+                  :checked="$root.movi.score === 3"
+                />
                 <label for="three">
                   <svg class="star">
                     <use xlink:href="#star" />
                   </svg>
                 </label>
-                <input type="radio" name="star" id="two" />
+                <input
+                  type="radio"
+                  name="star"
+                  id="two"
+                  v-on:click="sendRating(2)"
+                  :checked="$root.movi.score === 2"
+                />
                 <label for="two">
                   <svg class="star">
                     <use xlink:href="#star" />
                   </svg>
                 </label>
-                <input type="radio" name="star" id="one" />
+                <input
+                  type="radio"
+                  name="star"
+                  id="one"
+                  v-on:click="sendRating(1)"
+                  :checked="$root.movi.score === 1"
+                />
                 <label for="one">
                   <svg class="star">
                     <use xlink:href="#star" />
@@ -139,7 +199,57 @@
   </body>
 </template>
 
-<script></script>
+<script>
+import axios from "axios";
+
+export default {
+  name: "Movie Detail",
+  data: function () {
+    return {
+      score: 0,
+    };
+  },
+  // created(){
+  //   .get("http://localhost:3000/movies/")
+  //     .then((response) => {
+  //       // Do something if call succeeded
+  //       console.log(response);
+  //       response.data = response.data;
+  //       this.recommended_movies = response;
+  //     })
+  //     .catch((error) => {
+  //       // Do something if call failed
+  //       console.log(error);
+  // }
+  methods: {
+    changer: function (liste) {
+      var l = [];
+      for (var i = 0; i < liste.length; i++) {
+        l.push(this.$root.hm.get(liste[i]));
+      }
+      return l;
+    },
+    sendRating: function (score) {
+      axios
+        .put("http://localhost:3000/movies/" + this.$root.movi._id, {
+          title: this.$root.movi.title,
+          date: this.$root.movi.date,
+          genre_ids: this.$root.movi.genre_ids,
+          adult: this.$root.movi.adult,
+          viewers: [],
+          score: score,
+        })
+        .then((res) => {
+          //console.log(res);
+          this.$root.movi.score = res.data.score;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+};
+</script>
 
 <style>
 @import url(https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);

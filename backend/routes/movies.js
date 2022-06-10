@@ -3,10 +3,44 @@ const router = express.Router();
 const MovieModel = require("../models/movies");
 module.exports = router;
 var ed = require("edit-distance");
+const hm = new Map([
+  [28, 0],
+  [12, 1],
+  [16, 2],
+  [35, 3],
+  [80, 4],
+  [99, 5],
+  [18, 6],
+  [10751, 7],
+  [14, 8],
+  [36, 9],
+  [27, 10],
+  [10402, 11],
+  [9648, 12],
+  [10749, 13],
+  [878, 14],
+  [10770, 15],
+  [53, 16],
+  [10752, 17],
+  [37, 18],
+]);
 
 router.get("/", async function (req, res) {
   const movies = await MovieModel.find({}).populate("viewers");
   res.send(movies);
+});
+
+router.get("/genres/:genre_id", async function (req, res) {
+  const movies = await MovieModel.find({}).populate("viewers");
+  var genre = req.params.genre_id;
+  var ret = [];
+  for (const movie of movies)
+    if (movie.genre_ids.includes(genre)) ret.push(movie);
+  ret.sort(function (a, b) {
+    if (a.popularity >= b.popularity) return -1;
+    return 1;
+  });
+  res.send(ret);
 });
 
 function lev_dis(a, b) {
@@ -38,7 +72,7 @@ router.get("/search/:s", async function (req, res) {
   const movies = await MovieModel.find({});
   var ret = [];
   for (var i = 0; i < movies.length; i++)
-    if (sim(movies[i].title, s) >= 0.8) ret.push(movies[i]);
+    if (sim(movies[i].title, s) >= 0.9) ret.push(movies[i]);
   ret.sort(function (a, b) {
     if (sim(a.title, s) > sim(b.title, s)) return -1;
     else if (sim(a.title, s) < sim(b.title, s)) return 1;
@@ -60,6 +94,7 @@ router.post("/new", function (req, res) {
     overview: req.body.overview,
     popularity: req.body.popularity,
     viewers: [],
+    score: 5,
   });
 
   newMovie
@@ -72,10 +107,55 @@ router.post("/new", function (req, res) {
     });
 });
 
+function coordinate_compression(a) {
+  var ret = [];
+  for (var i = 0; i < 19; i++) ret.push(0);
+  for (var i = 0; i < a.genre_ids.length; i++) ret[hm.get(a.genre_ids[i])] = 1;
+  return ret;
+}
+
+function dot_product(a, b) {
+  var ret = 0;
+  for (var i = 0; i < 19; i++) ret += a[i] * b[i];
+  return ret;
+}
+
+router.get("/recommended", async function (req, res) {
+  var movies = await MovieModel.find({ score: { $gt: 0.5 } });
+  var ret = await MovieModel.find({ score: 0 });
+  console.log(movies);
+  var average_genre_score = [];
+  var cnt_genre = [];
+  for (var i = 0; i < 19; i++) {
+    average_genre_score.push(0);
+    cnt_genre.push(0);
+  }
+  for (var i = 0; i < movies.length; i++) {
+    for (var j = 0; j < movies[i].genre_ids.length; j++) {
+      const genre = hm.get(movies[i].genre_ids[j]);
+      cnt_genre[genre]++;
+      average_genre_score[genre] += movies[i].score - 3;
+    }
+  }
+  for (var i = 0; i < 19; i++)
+    if (cnt_genre[i] > 0) average_genre_score[i] /= cnt_genre[i];
+  ret.sort(function (a, b) {
+    var ca = coordinate_compression(a);
+    var cb = coordinate_compression(b);
+    var da = dot_product(ca, average_genre_score);
+    var db = dot_product(cb, average_genre_score);
+    if (da >= db) return -1;
+    else return 1;
+  });
+  res.json(ret);
+});
+
 router.put("/:id", async function (req, res) {
   console.log(req.params["id"]);
 
   const filter = { _id: req.params.id };
+  var def_score = 0;
+  if (req.body.hasOwnProperty("score")) def_score = req.body.score;
 
   const update = {
     title: req.body.title,
@@ -83,6 +163,7 @@ router.put("/:id", async function (req, res) {
     genre_ids: req.body.genre_ids,
     adult: req.body.adult,
     viewers: [],
+    score: def_score,
   };
 
   try {

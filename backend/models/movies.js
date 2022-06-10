@@ -14,6 +14,7 @@ const MovieSchema = new mongoose.Schema({
   popularity: { type: Number },
   vote_count: { type: Number },
   viewers: [{ type: Schema.Types.ObjectId, ref: "UserModel" }],
+  score: { type: Number },
 });
 
 const MovieModel = mongoose.model("MovieModel", MovieSchema, "movies");

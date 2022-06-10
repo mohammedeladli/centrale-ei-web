@@ -1,34 +1,82 @@
 <template>
   <div class="topnav">
-    <router-link class="nav-link" to="/">
+    <router-link class="nav-link" @click="backup()" to="/">
       <img alt="ChillaCS logo" src="./assets/logo.png" height="10px" />
     </router-link>
     <router-link class="nav-linkl" to="/login">Login</router-link>
     <router-link class="nav-linkl" to="/add_movie">Add Movie</router-link>
-    <router-link class="nav-linkl" to="/users">Users</router-link>
-    <router-link class="nav-linkl" to="/movie">Movies</router-link>
-    <router-link class="nav-linkl" to="/">Home</router-link>
+
+    <router-link class="nav-linkl" to="/movies/recommended"
+      >Recommended</router-link
+    >
+    <router-link class="nav-linkl" @click="backup()" to="/">Home</router-link>
+    >
   </div>
   <router-view />
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       movi: Object,
-      // hm: new Map([
-      //   [28, "Action"][(12, "Adventure")][(16, "Animation")][(35, "Comedy")][
-      //     (80, "Crime")
-      //   ][(99, "Documentary")][(18, "Drama")][(10751, "Family")][
-      //     (14, "Fantasy")
-      //   ][(36, "History")][(27, "Horror")][(10402, "Music")][(9648, "Mystery")][
-      //     (10749, "Romance")
-      //   ][(878, "Science Fiction")][(10770, "TV Movie")][(53, "Thriller")][
-      //     (10752, "War")
-      //   ][(37, "Western")],
-      // ]),
+      moviesbackup: Array,
+      movies: Array,
+      genre: Number,
+      hm: new Map([
+        [28, "Action"],
+        [12, "Adventure"],
+        [16, "Animation"],
+        [35, "Comedy"],
+        [80, "Crime"],
+        [99, "Documentary"],
+        [18, "Drama"],
+        [10751, "Family"],
+        [14, "Fantasy"],
+        [36, "History"],
+        [27, "Horror"],
+        [10402, "Music"],
+        [9648, "Mystery"],
+        [10749, "Romance"],
+        [878, "Science Fiction"],
+        [10770, "TV Movie"],
+        [53, "Thriller"],
+        [10752, "War"],
+        [37, "Western"],
+      ]),
     };
+  },
+  created() {
+    axios
+      .get("http://localhost:3000/movies")
+      .then((response) => {
+        // Do something if call succeeded
+        console.log(response);
+        this.moviesbackup = response;
+        this.movies = response;
+      })
+      .catch((error) => {
+        // Do something if call failed
+        console.log(error);
+      });
+    axios
+      .get("http://localhost:3000/movies/recommended")
+      .then((response) => {
+        // Do something if call succeeded
+        console.log(response);
+        this.recommended_movies = response;
+      })
+      .catch((error) => {
+        // Do something if call failed
+        console.log(error);
+      });
+  },
+  methods: {
+    backup: function () {
+      this.movies = this.moviesbackup;
+    },
   },
 };
 </script>
@@ -42,6 +90,7 @@ export default {
 .nav-link {
   font-weight: bold;
   color: #2c3e50;
+  align-items: center;
 }
 
 .nav-link.router-link-exact-active {
@@ -66,6 +115,7 @@ header {
   background-color: #333;
   overflow: hidden;
   align-items: left;
+  justify-content: center;
   /* position: fixed; */
 }
 
@@ -82,11 +132,11 @@ header {
   float: right;
   color: #f2f2f2;
   text-align: center;
-  padding: 14px 16px;
+  padding: 40px 30px;
   text-decoration: none;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .topnav a:hover {

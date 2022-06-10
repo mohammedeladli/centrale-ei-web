@@ -11,7 +11,7 @@
             <input
               type="text"
               class="login__input"
-              placeholder="User name / Email"
+              placeholder="User Name / Email"
             />
           </div>
           <div class="login__field">
@@ -56,14 +56,12 @@
   font-family: Raleway, sans-serif;
 }
 
-body {
-}
-
 .container {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  overflow-y: hidden;
 }
 
 .screen {
@@ -179,7 +177,7 @@ body {
   font-weight: 700;
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 50%;
   color: #ff1100;
   box-shadow: 0px 2px 2px #0f0f11;
   cursor: pointer;

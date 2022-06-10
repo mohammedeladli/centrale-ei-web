@@ -1,6 +1,9 @@
 <template>
   <body>
     <div class="home">
+      <div class="logo">
+        <img alt="ChillaCS logo" src="../assets/logo.png" />
+      </div>
       <br />
       <form @submit.prevent="searchMovies()" class="search-box">
         <input
@@ -12,8 +15,18 @@
         />
         <input type="submit" value="Search" />
       </form>
+      <br />
+      <div class="popu">Most Popular Movies:</div>
+      <br />
+      <br />
+      <br />
+
       <div class="movies-list">
-        <div class="movie" v-for="movie in movies.data" :key="movie._id">
+        <div
+          class="movie"
+          v-for="movie in $root.movies.data.slice(0, this.offset)"
+          :key="movie._id"
+        >
           <router-link
             :to="'/movie/' + movie._id"
             class="movie-link"
@@ -41,6 +54,17 @@
           </router-link>
         </div>
       </div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <a>
+        <button @click="LoadMore" class="bn53">Load More</button>
+      </a>
     </div>
   </body>
 </template>
@@ -48,27 +72,18 @@
 <script>
 import axios from "axios";
 export default {
-  name: "Home",
-  data: function () {
+  data() {
     return {
-      movies: [],
+      offset: Number,
     };
   },
   created() {
-    axios
-      .get("http://localhost:3000/movies")
-      .then((response) => {
-        // Do something if call succeeded
-        console.log(response);
-        response.data = response.data.slice(0, 100);
-        this.movies = response;
-      })
-      .catch((error) => {
-        // Do something if call failed
-        console.log(error);
-      });
+    this.offset = 18;
   },
   methods: {
+    LoadMore: function () {
+      this.offset += 9;
+    },
     update: function (mov) {
       this.$root.movi = mov;
     },
@@ -78,15 +93,17 @@ export default {
         .get("http://localhost:3000/movies/search/" + search)
         .then((response) => {
           console.log("http://localhost:3000/movies/search/" + search);
-          this.movies = response;
+          this.$root.movies = response;
         })
         .catch((error) => {
           this.moviesLoadingError =
             "An error occured while searching for movies.";
           console.log(error);
         });
+      //console.log(this.$root.movies.data);
     },
   },
+  name: "Home",
 };
 </script>
 
@@ -94,9 +111,10 @@ export default {
 <style scoped>
 .home {
   text-align: center;
-  /*background: linear-gradient(#1f1b1b, #ff0000);*/
   padding: 0px 0px;
   background-color: #161616;
+  overflow-y: scroll;
+  height: 709px;
 }
 
 h3 {
@@ -121,7 +139,10 @@ body {
   transform: scale(1.2);
   transition: 300ms;
 }
-
+.logo {
+  height: 10px;
+  width: 30px;
+}
 .movies-list {
   display: flex;
   flex-wrap: wrap;
@@ -135,6 +156,13 @@ body {
   margin: auto;
   height: 400px;
   transition: all 0.5s ease-in-out;
+}
+
+.popu {
+  color: #ffffff;
+  font-size: 50px;
+  justify-content: left;
+  font-family: Century Gothic;
 }
 
 .product-image:hover {
@@ -165,9 +193,67 @@ body {
   opacity: 0;
   transition: all 0.5s ease-in-out;
 }
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 300px;
+  height: 200px;
+  transition: all 0.5s ease-in-out;
+  bottom: 20px;
+  gap: 40px;
+  padding-top: 1%;
+}
+.logo:hover {
+  transform: scale(1.3);
+}
 h4 {
   margin: 0px 0 0;
 }
+.bn53 {
+  background-color: #b81515;
+  padding: 7px;
+  width: 100px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  animation: bn53bounce 4s infinite;
+  cursor: pointer;
+}
+
+@keyframes bn53bounce {
+  5%,
+  50% {
+    transform: scale(1);
+  }
+
+  10% {
+    transform: scale(1);
+  }
+
+  15% {
+    transform: scale(1);
+  }
+
+  20% {
+    transform: scale(1) rotate(-5deg);
+  }
+
+  25% {
+    transform: scale(1) rotate(5deg);
+  }
+
+  30% {
+    transform: scale(1) rotate(-3deg);
+  }
+
+  35% {
+    transform: scale(1) rotate(2deg);
+  }
+
+  40% {
+    transform: scale(1) rotate(0);
+  }
+}
+
 .most-popular {
   font-weight: 700;
   color: #ffffff;

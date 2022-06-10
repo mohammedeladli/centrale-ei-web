@@ -37,6 +37,7 @@ async function populateMovies(movies) {
           popularity: movies[i].data.results[j].popularity,
           vote_count: movies[i].data.results[j].vote_count,
           viewers: [],
+          score: 0,
         });
 
         temp = await newMovie.save();
